@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EIN Processing Times Chart Viewer</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="./css/chart-style.css">
+    
+    <!-- External Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+<body style="overflow: auto;">
+    <div class="container">
+        <div class="header">
+            <h1>EIN Processing Times Chart</h1>
+            <p>Interactive chart viewer with refresh functionality</p>
+            <button class="refresh-btn" id="refreshBtn">Refresh Chart</button>
+        </div>
+        
+        <div class="iframe-container">
+            <iframe id="chartFrame" src="./chart.html" title="EIN Processing Times Chart"></iframe>
+        </div>
+        
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat">
+                <div class="stat-value" id="lastRefresh">--</div>
+                <div class="stat-label">Last Refreshed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="refreshCount">0</div>
+                <div class="stat-label">Refresh Count</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ChartViewer {
+            constructor() {
+                this.refreshCount = 0;
+                this.init();
+            }
+
+            init() {
+                $('#refreshBtn').on('click', () => this.refreshChart());
+                this.updateLastRefresh();
+                this.showStats();
+            }
+
+            refreshChart() {
+                const iframe = document.getElementById('chartFrame');
+                const refreshBtn = $('#refreshBtn');
+                
+                // Disable button during refresh
+                refreshBtn.prop('disabled', true).text('Refreshing...');
+                
+                // Add timestamp to force reload
+                const timestamp = new Date().getTime();
+                iframe.src = `./chart.html?t=${timestamp}`;
+                
+                // Update refresh count and last refresh time
+                this.refreshCount++;
+                this.updateRefreshCount();
+                this.updateLastRefresh();
+                
+                // Re-enable button after a delay
+                setTimeout(() => {
+                    refreshBtn.prop('disabled', false).text('Refresh Chart');
+                }, 2000);
+            }
+
+            updateLastRefresh() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                $('#lastRefresh').text(timeString);
+            }
+
+            updateRefreshCount() {
+                $('#refreshCount').text(this.refreshCount);
+            }
+
+            showStats() {
+                $('#stats').show();
+            }
+        }
+
+        // Initialize the chart viewer when the document is ready
+        $(document).ready(function() {
+            new ChartViewer();
+        });
+    </script>
+</body>
+</html> 

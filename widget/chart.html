@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: hidden;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EIN Processing Times Chart</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="./css/chart-style.css">
+    
+    <!-- External Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Local JavaScript -->
+    <script src="../dist/data-reader.js"></script>
+</head>
+<body>
+    <div class="container static-chart">
+        <div class="chart-container">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                Loading chart data...
+            </div>
+            <div class="error" id="error" style="display: none;"></div>
+            <canvas id="einChart" style="display: none;"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Check if we're in an iframe and apply appropriate styling
+        if (window.self !== window.top) {
+            document.body.classList.add('iframe-embedded');
+        }
+        
+        // Debug: Check if EINDataReader is available
+        console.log('EINDataReader type:', typeof EINDataReader);
+        if (typeof EINDataReader === 'undefined') {
+            console.error('EINDataReader is not defined! Check if data-reader.js is loaded correctly.');
+        }
+
+        class EINChartApp {
+            constructor() {
+                this.chart = null;
+                this.dataReader = new EINDataReader('1ttrM1d--bh70B5rJ2sRWXHUPjVaKxB6b_ECGuLO-kjI', 586478099);
+                this.init();
+            }
+
+            async init() {
+                // Auto-load chart on initialization (no refresh button)
+                await this.loadChart();
+            }
+
+            async loadChart() {
+                try {
+                    this.showLoading();
+                    
+                    // Fetch and process data
+                    const rawData = await this.dataReader.fetchData();
+                    const chartData = this.dataReader.processDataForChart(rawData);
+                    const chartOptions = this.dataReader.getChartOptions();
+                    
+                    // Check if we're using sample data
+                    const isUsingSampleData = rawData.length === 18 && rawData[0].Date === '1/15/2024';
+                    
+                    // Destroy existing chart if it exists
+                    if (this.chart) {
+                        this.chart.destroy();
+                    }
+                    
+                    // Create new chart
+                    const ctx = document.getElementById('einChart').getContext('2d');
+                    this.chart = new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: chartOptions
+                    });
+                    
+                    // Show chart and hide loading
+                    this.showChart();
+                    
+                    // Show sample data notice if applicable
+                    if (isUsingSampleData) {
+                        this.showSampleDataNotice();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading chart:', error);
+                    this.showError(`Error loading data: ${error.message}`);
+                }
+            }
+
+            showLoading() {
+                $('#loading').show();
+                $('#error').hide();
+                $('#einChart').hide();
+            }
+
+            showChart() {
+                $('#loading').hide();
+                $('#error').hide();
+                $('#einChart').show();
+            }
+
+            showError(message) {
+                $('#loading').hide();
+                $('#error').text(message).show();
+                $('#einChart').hide();
+            }
+
+            showSampleDataNotice() {
+                const notice = $(`
+                    <div class="sample-data-notice" style="
+                        background-color: #fff3cd;
+                        color: #856404;
+                        padding: 12px 20px;
+                        border-radius: 4px;
+                        margin: 15px 0;
+                        border: 1px solid #ffeaa7;
+                        text-align: center;
+                        font-size: 14px;
+                    ">
+                        📊 Currently displaying sample data. Live data from Google Sheets could not be loaded due to browser restrictions.
+                    </div>
+                `);
+                
+                // Remove any existing notice
+                $('.sample-data-notice').remove();
+                
+                // Add notice after the chart container
+                $('.chart-container').after(notice);
+            }
+        }
+
+        // Initialize the app when the document is ready
+        $(document).ready(function() {
+            new EINChartApp();
+        });
+    </script>
+</body>
+</html>

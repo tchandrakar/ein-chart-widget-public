@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Static chart specific styles */
+.static-chart {
+    padding: 10px !important;
+}
+
+.static-chart .chart-container {
+    margin: 10px 0 !important;
+    height: 400px !important;
+}
+
+/* Iframe container styles */
+.iframe-container {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+}
+
+body.iframe-embedded {
+    padding: 5px;
+    background-color: white;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.header p {
+    color: #7f8c8d;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.chart-container {
+    position: relative;
+    height: 500px;
+    margin: 40px 0;
+    background-color: #fdfdfd;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 18px;
+    color: #6c757d;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 4px;
+    margin: 20px 0;
+    border: 1px solid #f5c6cb;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4A90E2;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-right: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url('../fonts/Graphik/Graphik-Regular.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4A90E2;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.refresh-btn {
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.refresh-btn:hover {
+    background-color: #357abd;
+}
+
+.refresh-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+} 
