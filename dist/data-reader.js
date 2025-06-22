@@ -162,7 +162,7 @@ class EINDataReader {
                 ninetyFifthPercentile: parseFloat(row['95th Percentile']) || 0,
             };
         });
-        minDate.setMonth(minDate.getMonth() - 2);
+        minDate.setMonth(minDate.getMonth() - 3);
         minDate.setDate(1);
         const dateFilteredMinProcessedData = processedData
             .filter(item => !isNaN(item.date.getTime()) && item.date >= minDate) // Filter out invalid dates
@@ -432,10 +432,10 @@ class EINDataReader {
                     },
                     ticks: {
                         color: '#666666',
+                        padding: 2,
                         font: {
                             size: 12,
                             family: 'Roboto Mono',
-                            padding: 2,
                         },
                         maxRotation: 0,
                         minRotation: 0,
@@ -456,10 +456,10 @@ class EINDataReader {
                     },
                     ticks: {
                         color: '#999999',
+                        padding: 4,
                         font: {
                             size: 12,
                             family: 'Roboto Mono',
-                            padding: 4,
                         },
                         stepSize: stepSize,
                         callback: function (value) {
